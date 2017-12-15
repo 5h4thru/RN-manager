@@ -1,5 +1,12 @@
 import firebase from 'firebase';
-import { EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_USER_SUCCESS, LOGIN_USER_FAIL } from './types';
+import {
+  EMAIL_CHANGED,
+  PASSWORD_CHANGED,
+  LOGIN_USER_START,
+  LOGIN_USER_SUCCESS,
+  LOGIN_USER_FAIL
+} from './types';
+
 
 export const emailChanged = (text) => {
   return {
@@ -17,6 +24,8 @@ export const passwordChanged = (text) => {
 
 export const loginUser = ({ email, password }) => {
   return dispatch => {
+    dispatch({ type: LOGIN_USER_START }); // dispatch action to indicate login process started
+
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
