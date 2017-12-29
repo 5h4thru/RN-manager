@@ -1,4 +1,4 @@
-import { EMPLOYEE_UPDATE } from '../actions/types';
+import { EMPLOYEE_UPDATE, EMPLOYEE_CREATE } from '../actions/types';
 
 const INITIAL_STATE = { name: '', phone: '', shift: '' };
 
@@ -11,6 +11,8 @@ export default (state = INITIAL_STATE, action) => {
      * [action.payload.prop] is NOT an array
      * is "key-interpolation" here [action.payload.prop] is name
      */
+     case EMPLOYEE_CREATE:
+      return { INITIAL_STATE };
     default:
       return state;
   }
