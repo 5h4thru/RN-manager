@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Communications from 'react-native-communications';
+import { text } from 'react-native-communications';
 import EmployeeForm from './EmployeeForm';
-import { employeeUpdate, employeeSave } from '../actions';
+import { employeeUpdate, employeeSave, employeeDelete } from '../actions';
 import { CardSection, Card, Button, Confirm } from './common';
 
 class EmployeeEdit extends Component {
@@ -22,11 +22,19 @@ class EmployeeEdit extends Component {
 
   onTextPress() {
     const { phone, shift } = this.props;
-    Communications.text(phone, `Your upcoming shift is on ${shift}`);
+    text(phone, `Your upcoming shift is on ${shift}`);
   }
 
   onDeletePress() {
     this.setState({ showModal: !this.state.showModal });
+  }
+
+  onConfirmAccept() {
+    this.props.employeeDelete({ uid: this.props.employee.uid });
+  }
+
+  onConfirmReject() {
+    this.setState({ showModal: false });
   }
 
   render() {
@@ -46,7 +54,13 @@ class EmployeeEdit extends Component {
           <Button onPress={this.onDeletePress.bind(this)}>Delete Employee</Button>
         </CardSection>
 
-        <Confirm visible={this.state.showModal}>Are you sure you want to delete this?</Confirm>
+        <Confirm
+          visible={this.state.showModal}
+          onAccept={this.onConfirmAccept.bind(this)}
+          onReject={this.onConfirmReject.bind(this)}
+        >
+          Are you sure you want to delete employee?
+        </Confirm>
       </Card>
     );
   }
@@ -57,4 +71,6 @@ const mapStateToProps = state => {
   return { name, phone, shift };
 };
 
-export default connect(mapStateToProps, { employeeUpdate, employeeSave })(EmployeeEdit);
+export default connect(mapStateToProps, { employeeUpdate, employeeSave, employeeDelete })(
+  EmployeeEdit
+);
